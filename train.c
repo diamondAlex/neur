@@ -94,19 +94,15 @@ void save_net(char *name, double *arr, int length){
     fclose(f);
 }
 
-void read_net(char* name){
+void read_net(char* name, double *l){
     FILE* f = fopen(name,"r");
     if(!f){
         printf("couldn't open file");
         return;
     }
-    double neur[100000];
-    double* p;
-    p = neur;
     int nbr;
-    while((nbr=fread(p, sizeof(double), 1, f)) == 1){
-        printf("*p = %f\n",*p);
-        p++;
+    while((nbr=fread(l, sizeof(double), 1, f)) == 1){
+        l++;
     }
 }
 
@@ -137,26 +133,37 @@ int getTag(char *name){
     n_i -= 48;
     return n_i;
 }
-
 int main(){
+    double l1[w*h*nn] = {0};
+    double l2[nn*nnr] = {0};
+    read_net("l1.neur", l1);
+    int i = 0;
+    for(i=0;i<w*h*nn;i++){
+        printf("%f\n",l1[i]);
+    }
+    printf("i = %i\n",i);
+}
+int t_main(){
 
     int n[w*h] = {0};
     double l1[w*h*nn] = {0};
     double l2[nn*nnr] = {0};
     double n1[nn] = {0};
     double nr[nnr] = {0};
+    read_net("l1.neur", l1);
+    read_net("l2.neur", l2);
 
-    int i=0;
-    while(i < w*h*nn){
-        l1[i] = ((rand()/1E9)*4);
-        i++;
-    }
+    /*int i=0;*/
+    /*while(i < w*h*nn){*/
+        /*l1[i] = ((rand()/1E9)*4);*/
+        /*i++;*/
+    /*}*/
 
-    i=0;
-    while(i < w*h*nnr){
-        l2[i] = ((rand()/1E9)*4);
-        i++;
-    }
+    /*i=0;*/
+    /*while(i < w*h*nnr){*/
+        /*l2[i] = ((rand()/1E9)*4);*/
+        /*i++;*/
+    /*}*/
 
     char imagelist[10][100];
     get_image_list(imagelist);
@@ -173,7 +180,7 @@ int main(){
         printf("tag = %i\n",tag);
         /*printf("\n");*/
 
-        i=0;
+        int i=0;
         char c;
         while((c = getc(f)) != EOF && i!=(w*h)){
             if(c == '0'){
